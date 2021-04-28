@@ -1,23 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from './../contexts/ThemeContext';
+import { TodoListContext } from './../contexts/TodoListContext'
 import AddNewTodo from './AddNewTodo';
 
 const  ToDoList = () => {
   const { isDarkTheme, darkTheme, lightTheme, changeTheme } = useContext(ThemeContext)
+  const { todos, addTodos, removeToDo } = useContext(TodoListContext)
   const theme = isDarkTheme ? darkTheme : lightTheme;
-  const [todos, setTodos] = useState([
-    { text: 'Task 1', id: 1 },
-    { text: 'Task 2', id: 2 },
-    { text: 'Task 3', id: 3 },
-  ])
 
   const [count, setCount] = useState(0);
-  const addTodos = (newTodo) => {
-    setTodos([
-      ...todos,
-      { text: newTodo, id: todos.length+1 }
-    ])
-  }
 
   useEffect(() => {
     console.log('use effect', todos)
@@ -33,11 +24,18 @@ const  ToDoList = () => {
       }}
     >
       {
-        todos.map((todo) => {
+        todos.length > 0 ? 
+        (todos.map((todo) => {
           return (
-            <p id={todo.id} className="item">{todo.text}</p>
+            <p
+              key={todo.id} className="item"
+              onClick={() => removeToDo(todo.id)}
+            >
+              {todo.text}
+            </p>
           )
-        })
+        })) :
+        <div> No Todos </div>
       }
       <button
         class="ui button primary"
