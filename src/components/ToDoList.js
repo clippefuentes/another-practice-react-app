@@ -5,7 +5,7 @@ import AddNewTodo from './AddNewTodo';
 
 const  ToDoList = () => {
   const { isDarkTheme, darkTheme, lightTheme, changeTheme } = useContext(ThemeContext)
-  const { todos, addTodos, removeToDo } = useContext(TodoListContext)
+  const { todos, dispatch } = useContext(TodoListContext)
   const theme = isDarkTheme ? darkTheme : lightTheme;
 
   const [count, setCount] = useState(0);
@@ -13,6 +13,15 @@ const  ToDoList = () => {
   useEffect(() => {
     console.log('use effect', todos)
   }, [todos])
+
+  const handleAddTodos = (todo) => {
+    dispatch({ type: 'ADD_TODO', text: todo })
+  }
+
+  const handleRemoveTodos = (id) => {
+    dispatch({ type: 'REMOVE_TODO', id: id })
+  }
+
 
   return (
     <div
@@ -29,7 +38,7 @@ const  ToDoList = () => {
           return (
             <p
               key={todo.id} className="item"
-              onClick={() => removeToDo(todo.id)}
+              onClick={() => handleRemoveTodos(todo.id)}
             >
               {todo.text}
             </p>
@@ -44,7 +53,7 @@ const  ToDoList = () => {
         Change Theme
       </button>
 
-      <AddNewTodo addTodos={addTodos} />
+      <AddNewTodo addTodos={handleAddTodos} />
       <button onClick={() => setCount(count+1)}>Score: {count}</button>
     </div>
   )
